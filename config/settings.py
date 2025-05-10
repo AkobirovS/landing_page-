@@ -27,7 +27,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == "1"
 
-ALLOWED_HOSTS = ['landing-page-3zu6.onrender.com','https://landing-page-onc1.onrender.com/','localhost','127.0.0.1']
+ALLOWED_HOSTS = ['landing-page-onc1.onrender.com', 'landing-page-3zu6.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
