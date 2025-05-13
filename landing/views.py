@@ -11,7 +11,7 @@ from .serializers import LeadSerializer
 TELEGRAM_BOT_TOKEN = '7810279444:AAH6mmvinNZR3fkSZsPCyPXGtYjnJZkYMiY'
 TELEGRAM_CHAT_ID = '6458736545'
 
-@method_decorator(csrf_exempt, name='dispatch')  # ✅ Отключаем CSRF
+@method_decorator(csrf_exempt, name='dispatch')  # Отключаем CSRF
 class LeadCreateView(APIView):
     def get(self, request):
         return Response({"message": "Only POST requests allowed here."})
@@ -36,10 +36,16 @@ class LeadCreateView(APIView):
 
             try:
                 response = requests.post(url, data=payload)
-                response.raise_for_status()
+                response.raise_for_status()  # Поднимет исключение, если что-то пойдет не так
             except requests.RequestException as e:
-                print(f"Ошибка при отправке в Telegram: {e}")
+                return Response(
+                    {"error": f"Ошибка при отправке данных в Telegram: {str(e)}"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Invalid data", "details": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST
+        )
