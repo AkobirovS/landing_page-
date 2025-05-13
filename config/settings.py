@@ -29,12 +29,14 @@ DEBUG = os.getenv("DEBUG") == "1"
 
 ALLOWED_HOSTS = ['landing-page-onc1.onrender.com', 'landing-page-3zu6.onrender.com', 'localhost', '127.0.0.1']
 
-
 CSRF_TRUSTED_ORIGINS = [
     'https://landing-page-onc1.onrender.com',
-    'https://localhost',
-    'https://127.0.0.1',
+    'https://landing-page-3zu6.onrender.com',
 ]
+
+# Убедись, что DEBUG выключен в проде:
+
+
 
 CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = True
