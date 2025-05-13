@@ -1,6 +1,6 @@
 from django.urls import path
-from landing.views import LeadCreateView
+from .views import LeadCreateView
 
 urlpatterns = [
-    path('lead/', LeadCreateView.as_view(), name='lead-create'),
+    path('create-lead/', LeadCreateView.as_view(), name='create-lead'),
 ]

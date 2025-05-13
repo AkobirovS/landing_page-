@@ -3,5 +3,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('landing.urls')),
+    path('api/', include('landing.urls')),  # замени 'landing' на имя твоего приложения
 ]
