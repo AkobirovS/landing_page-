@@ -8,18 +8,22 @@ from django.utils.decorators import method_decorator
 from .models import Lead
 from .serializers import LeadSerializer
 
+# 🔐 Замените на свои реальные данные
 TELEGRAM_BOT_TOKEN = '7810279444:AAH6mmvinNZR3fkSZsPCyPXGtYjnJZkYMiY'
 TELEGRAM_CHAT_ID = '6458736545'
 
-
-@method_decorator(csrf_exempt, name='dispatch')  # ✅ Отключаем CSRF для класса
+# ✅ Отключаем CSRF
+@method_decorator(csrf_exempt, name='dispatch')
 class LeadCreateView(APIView):
+    authentication_classes = []  # ⛔ Убираем аутентификацию (иначе может требовать CSRF)
+    permission_classes = []      # ⛔ Открыто для всех (ограничь по желанию)
+
     def post(self, request):
         serializer = LeadSerializer(data=request.data)
         if serializer.is_valid():
             lead = serializer.save()
 
-            # 📤 Формируем сообщение для Telegram
+            # 📤 Сообщение для Telegram
             message = (
                 f"📥 Новая заявка:\n"
                 f"👤 Имя: {lead.first_name}\n"
@@ -28,13 +32,12 @@ class LeadCreateView(APIView):
             )
 
             # 📲 Отправка в Telegram
-            url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-            payload = {
-                'chat_id': TELEGRAM_CHAT_ID,
-                'text': message
-            }
-
             try:
+                url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+                payload = {
+                    'chat_id': TELEGRAM_CHAT_ID,
+                    'text': message
+                }
                 response = requests.post(url, data=payload)
                 response.raise_for_status()
             except requests.RequestException as e:
